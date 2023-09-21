@@ -1,12 +1,12 @@
-const fs = require("fs")
+import fs from "fs"
 const HomePage = fs.readFileSync("frontend/index.html")
 
-module.exports = getHome = (req,res) => 
+export const getHome = (req,res) => 
 {
     res.end(HomePage)
 }
 
-module.exports = getDate = (res) =>
+export const getDate = (res) =>
 {
     const data = new Date();
     const Calendarium = 
@@ -18,3 +18,5 @@ module.exports = getDate = (res) =>
     }
     res.json({status:"success", data:Calendarium})
 }
+
+//export default { getDate, getHome }
