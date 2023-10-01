@@ -5,12 +5,12 @@ const router = express.Router();
 
 router.
     route("/")
-    .get(callendarControler.getAllLessons)
-    .post(callendarControler.addLesson)
+    .get((req,res) => callendarControler.getAllLessons(req,res))
+    .post((req,res) =>  callendarControler.addLesson(req,res))
 router.
-    route(":id")
-    .get(callendarControler.getLesson)
-    .patch(callendarControler.updateLesson)
-    .delete(callendarControler.deleteLesson)
+    route("/:id")
+    .get((req,res) => callendarControler.getLesson(req,res))
+    .patch((req,res) => callendarControler.updateLesson(req,res))
+    .delete((req,res) => callendarControler.deleteLesson(req,res))
 
 export default router

@@ -1,28 +1,115 @@
-//import Lesson from "./CallendarModel"
+import express from "express"
+import Lesson from "./CallendarModel.js"
 
-const getAllLessons = () =>
+const getAllLessons = async (req,res) =>
 {
-    console.log("Gets all lessons")
+    try{
+        const Lessons = await Lesson.find() 
+        console.log("Lessons all")
+        res.status(201).json({
+            message:"success",
+            Results: Lessons.length,
+            data:{
+                Lessons
+            }
+        })
+    }
+    catch(err){
+        console.error("FAIL")
+        res.status(401).json({
+                status:"fail",
+                message: err.message
+        }) 
+    }
 }
 
-const getLesson = () =>
+const getLesson = async (req,res) =>
 {
-    console.log("Gets lesson")
+    try{
+        const Lessons = await Lesson.findById(req.params.id) 
+        console.log("Lesson")
+        res.status(201).json({
+            message:"success",
+            data:{
+                Lessons
+            }
+        })
+    }
+    catch(err){
+        console.error("FAIL")
+        res.status(401).json({
+                status:"fail",
+                message: err.message
+        }) 
+    }
 }
 
-const addLesson = () =>
+const addLesson = async (req,res) =>
 {
-    console.log("Add lesson")
+    //const NewLesson = new Lesson({})
+    //NewLesson.save()
+    try{
+        const NewLesson = await Lesson.create(req.body)
+        console.log("Add lesson")
+        res.status(201).json({
+            status:"success",
+            data: {
+                Lesson: NewLesson
+            }
+        })
+    }catch(err){
+        console.error("FAIL")
+        res.status(401).json({
+                status:"fail",
+                message: err.message
+        })
+    };
 }
 
-const updateLesson = () =>
+const updateLesson = async (req,res) =>
 {
-    console.log("Updates lesson")
+   try
+   {
+        const lesson = await Lesson.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        })
+
+        console.log("Update lesson")
+        res.status(201).json({
+            status:"success",
+            data: {
+                lesson
+            }
+        })
+   }
+   catch(err)
+   {
+        console.error("FAIL")
+        res.status(401).json({
+                status:"fail",
+                message: err.message
+        })
+   }
 }
 
-const deleteLesson = () =>
+const deleteLesson = async (req,res) =>
 {
-    console.log("deletes Lesson")
+    try{
+        await Lesson.findByIdAndDelete(req.params.id)
+        res.status(201).json({
+            status:"success",
+            data: null
+        })
+    }
+    catch(err){
+        console.log("Check given Id")
+        res.status(401).json({
+            staus:"Fail",
+            message:err
+        })
+    }
 }
 
-export default {deleteLesson, updateLesson, addLesson, getLesson, getAllLessons}
+const callendarControler = {deleteLesson, updateLesson, addLesson, getLesson, getAllLessons}
+export default callendarControler
