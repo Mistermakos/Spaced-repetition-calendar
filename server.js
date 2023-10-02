@@ -1,8 +1,8 @@
-import app from "./app.js"
 import dotenv from 'dotenv'
+dotenv.config({path:"./config.env"})
+import app from "./app.js"
 import mongoose from "mongoose"
 
-dotenv.config({path:"./config.env"})
 
 async function connect()
 {

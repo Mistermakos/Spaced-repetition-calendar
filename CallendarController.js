@@ -1,10 +1,15 @@
 import express from "express"
 import Lesson from "./CallendarModel.js"
 
-const getAllLessons = async (req,res) =>
-{
+const getAllLessons = async (req,res) =>{
     try{
-        const Lessons = await Lesson.find() 
+        const query = {...req.query}
+        const exclude = ['page','sort','limit','fields']
+
+        exclude.forEach(ele => delete query[ele])
+        
+        const help = Lesson.find(query) 
+        const Lessons = await help; 
         console.log("Lessons all")
         res.status(201).json({
             message:"success",
