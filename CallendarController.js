@@ -8,7 +8,9 @@ const getAllLessons = async (req,res) =>{
 
         exclude.forEach(ele => delete query[ele])
         
-        const help = Lesson.find(query) 
+        let queryStr = JSON.stringify(query)
+        queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, match => `$${match}`)
+        const help = Lesson.find(JSON.parse(queryStr)) 
         const Lessons = await help; 
         console.log("Lessons all")
         res.status(201).json({
