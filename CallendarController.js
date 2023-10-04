@@ -1,17 +1,24 @@
 import express from "express"
 import Lesson from "./CallendarModel.js"
+import APIFeatures from "./utilities/APIFeatures.js"
 
-const getAllLessons = async (req,res) =>{
+export const top5Important = (req,res, next) => {
+    req.query.sort='-Importance'
+    req.query.limit='5'
+    req.query.fields='-date,-__v'
+    next();
+}
+
+export const getAllLessons = async (req,res) =>{
+    
     try{
-        const query = {...req.query}
-        const exclude = ['page','sort','limit','fields']
+        const features = new APIFeatures(Lesson.find(), req.query)
+            .filter()
+            .sort()
+            .limit()
+            .paginate()
 
-        exclude.forEach(ele => delete query[ele])
-        
-        let queryStr = JSON.stringify(query)
-        queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, match => `$${match}`)
-        const help = Lesson.find(JSON.parse(queryStr)) 
-        const Lessons = await help; 
+        const Lessons = await features.query; 
         console.log("Lessons all")
         res.status(201).json({
             message:"success",
@@ -30,7 +37,7 @@ const getAllLessons = async (req,res) =>{
     }
 }
 
-const getLesson = async (req,res) =>
+export const getLesson = async (req,res) =>
 {
     try{
         const Lessons = await Lesson.findById(req.params.id) 
@@ -51,7 +58,7 @@ const getLesson = async (req,res) =>
     }
 }
 
-const addLesson = async (req,res) =>
+export const addLesson = async (req,res) =>
 {
     //const NewLesson = new Lesson({})
     //NewLesson.save()
@@ -73,7 +80,7 @@ const addLesson = async (req,res) =>
     };
 }
 
-const updateLesson = async (req,res) =>
+export const updateLesson = async (req,res) =>
 {
    try
    {
@@ -100,7 +107,7 @@ const updateLesson = async (req,res) =>
    }
 }
 
-const deleteLesson = async (req,res) =>
+export const deleteLesson = async (req,res) =>
 {
     try{
         await Lesson.findByIdAndDelete(req.params.id)
@@ -118,5 +125,3 @@ const deleteLesson = async (req,res) =>
     }
 }
 
-const callendarControler = {deleteLesson, updateLesson, addLesson, getLesson, getAllLessons}
-export default callendarControler

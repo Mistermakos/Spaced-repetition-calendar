@@ -1,16 +1,21 @@
 import express from 'express'
-import callendarControler from './CallendarController.js'
+import * as callendarControler from './CallendarController.js'
 
 const router = express.Router();
 
+router
+    .route("/top-5-tasks")
+    
+    .get(callendarControler.top5Important, callendarControler.getAllLessons)
+
 router.
     route("/")
-    .get((req,res) => callendarControler.getAllLessons(req,res))
-    .post((req,res) =>  callendarControler.addLesson(req,res))
+    .get(callendarControler.getAllLessons)
+    .post(callendarControler.addLesson)
 router.
     route("/:id")
-    .get((req,res) => callendarControler.getLesson(req,res))
-    .patch((req,res) => callendarControler.updateLesson(req,res))
-    .delete((req,res) => callendarControler.deleteLesson(req,res))
+    .get(callendarControler.getLesson)
+    .patch(callendarControler.updateLesson)
+    .delete(callendarControler.deleteLesson)
 
 export default router

@@ -5,7 +5,7 @@ const LessonSchema = new mongoose.Schema({
     date: {type:String, required: [true, "Lesson must have a date"]},
     Title: {type:String, required:[true, "Lesson must have a Title"], unique: true},
     Importance: {type:Number, required: [true, "Lesson must have some level of importance"]},
-    State: {type:String, default: "In progress"}
+    State: {type:String, default: "In progress", select:false}
 });
 
 const Lesson = mongoose.model("Lesson", LessonSchema)
